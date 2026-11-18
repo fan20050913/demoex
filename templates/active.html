@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>员工账号激活</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .activate-card {
+            width: 400px;
+            background: #fff;
+            padding: 36px 32px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-item {
+            margin-bottom: 20px;
+        }
+        .form-item label {
+            display: block;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .form-item input {
+            width: 100%;
+            height: 44px;
+            padding: 0 14px;
+            border: 1px solid #dcdfe6;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-item input:focus {
+            border-color: #409eff;
+        }
+        input[readonly] {
+            background-color: #f5f7fa;
+            cursor: not-allowed;
+        }
+        .activate-btn {
+            width: 100%;
+            height: 46px;
+            background-color: #409eff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .activate-btn:hover {
+            background-color: #66b1ff;
+        }
+        .activate-btn:disabled {
+            background-color: #a0cfff;
+            cursor: not-allowed;
+        }
+        .tip {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #999;
+            text-align: center;
+        }
+        .msg-success{
+            color: #67c23a;
+            text-align:center;
+            margin-top:15px;
+        }
+        .msg-error{
+            color: #f56c6c;
+            text-align:center;
+            margin-top:15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="activate-card">
+        <h2 class="title">员工账号激活</h2>
+        <form id="activateForm">
+            <div class="form-item">
+                <label for="email">邮箱</label>
+                <input type="email" id="email" name="email" value="{{ email }}" readonly>
+            </div>
+            <div class="form-item">
+                <label for="password">设置密码</label>
+                <input type="password" id="password" name="password" placeholder="请设置激活密码" required>
+            </div>
+            <button type="submit" class="activate-btn" id="submitBtn">激活</button>
+        </form>
+        <div id="msgBox"></div>
+        <div class="tip">激活后即可登录系统</div>
+    </div>
+
+    <script>
+        const form = document.getElementById('activateForm');
+        const msgBox = document.getElementById("msgBox");
+        const submitBtn = document.getElementById("submitBtn");
+        // 登录页面地址
+        const loginUrl = "http://localhost:5173/login#/login";
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            msgBox.innerHTML = "";
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "提交中...";
+            try {
+                const formData = new URLSearchParams();
+                formData.append("email", email);
+                formData.append("password", password);
+
+                const res = await fetch("./active", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: formData,
+                    credentials: "same-origin"
+                })
+                const data = await res.json();
+                if (data.code === 200) {
+                    msgBox.innerHTML = `<div class="msg-success">✅ 激活成功！2秒后跳转登录页</div>`;
+                    // 延时2秒跳转
+                    setTimeout(()=>{
+                        location.href = loginUrl;
+                    }, 2000)
+                } else {
+                    msgBox.innerHTML = `<div class="msg-error">❌ ${data.message}</div>`;
+                }
+            } catch (err) {
+                msgBox.innerHTML = `<div class="msg-error">❌ 请求失败，请检查服务</div>`;
+                console.error(err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "激活";
+            }
+        })
+    </script>
+</body>
+</html>

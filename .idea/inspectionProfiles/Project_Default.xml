@@ -1,0 +1,27 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="PySide6" />
+          <option value="openai" />
+          <option value="python-dotenv" />
+          <option value="dashscope" />
+          <option value="chromadb" />
+          <option value="pandas" />
+          <option value="openpyxl" />
+          <option value="sounddevice" />
+          <option value="numpy" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="pyalgotrade.feed.*" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OA系统后台管理员登录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(90deg, #4b42d8, #9c27d0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            width: 700px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        .icon-wrap {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background-color: #f3f3f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-wrap svg {
+            width: 120px;
+            height: 120px;
+            fill: #444;
+        }
+        .form-area {
+            flex: 1;
+        }
+        .form-area h2 {
+            text-align: center;
+            font-size: 28px;
+            color: #222;
+            margin-bottom: 36px;
+        }
+        .form-item {
+            margin-bottom: 24px;
+        }
+        .form-item label {
+            display: block;
+            font-size: 15px;
+            color: #444;
+            margin-bottom: 8px;
+        }
+        .form-item input {
+            width: 100%;
+            height: 48px;
+            border-radius: 999px;
+            border: 1px solid #ddd;
+            padding: 0 18px;
+            font-size: 16px;
+        }
+        #id_username {
+            background-color: #eef6ff;
+        }
+        .pwd-input-wrap {
+            position: relative;
+        }
+        .pwd-input-wrap input {
+            padding-right: 50px;
+        }
+        .eye-btn {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #777;
+        }
+        .login-btn {
+            width: 100%;
+            height: 52px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 999px;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .login-btn:hover {
+            background-color: #218838;
+        }
+        .error-msg {
+            color: red;
+            text-align: center;
+            margin-bottom:16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="icon-wrap">
+            <svg viewBox="0 0 24 24">
+                <path d="M20 3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h3l-1 4v1h12v-1l-1-4h3c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8 4c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 8H8v-.5c0-1.33 2.67-2 4-2s4 .67 4 2v.5z"/>
+            </svg>
+        </div>
+        <div class="form-area">
+            <h2>OA系统后台管理员登录</h2>
+            {% if form.errors %}
+                <div class="error-msg">账号或密码错误</div>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-item">
+                    <label>邮箱</label>
+                    <input type="text" name="username" id="id_username" value="dongdong@qq.com">
+                </div>
+                <div class="form-item">
+                    <label>密码</label>
+                    <div class="pwd-input-wrap">
+                        <input type="password" name="password" id="id_password" value="">
+                        <button type="button" class="eye-btn" id="eye">👁</button>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn">登录</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const pwdInput = document.getElementById('id_password');
+        const eyeBtn = document.getElementById('eye');
+        eyeBtn.onclick = function(e) {
+            e.preventDefault();
+            if(pwdInput.type === 'password'){
+                pwdInput.type = 'text';
+                eyeBtn.textContent = '🙈';
+            }else{
+                pwdInput.type = 'password';
+                eyeBtn.textContent = '👁';
+            }
+        }
+    </script>
+</body>
+</html>
